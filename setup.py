@@ -28,6 +28,10 @@ services:
       WORDPRESS_DB_NAME: wordpress
     volumes:
       - ./wordpress:/var/www/html
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "5"
 
   db:
     image: mysql:5.7
@@ -36,9 +40,15 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: '{database_password}'
-      MYSQL_RANDOM_ROOT_PASSWORD: '{database_password}'
+      MYSQL_ROOT_PASSWORD: '{database_password}'
     volumes:
       - ./db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "5"
 
   caddyproxy:
     network_mode: "host"
@@ -55,7 +65,11 @@ services:
       ]
     ports:
       - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"'''
+      - "0.0.0.0:443:443"
+    logging:
+      options:
+        max-size: "5m"
+        max-file: "5"'''
 
 
 with open("docker-compose.yaml","w") as compose_file:
